@@ -9,9 +9,11 @@ bool relay[4];
 
 void setup(){
   Serial.begin(9600);
-  pinMode(LED_BUILTIN,OUTPUT); 
-  pinMode(relayShift,OUTPUT);
-  pinMode(relayShift + 1,OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT); 
+  pinMode(relayShift, OUTPUT);
+  pinMode(relayShift + 1, OUTPUT);
+  pinMode(relayShift + 2, OUTPUT);
+  pinMode(relayShift + 3, OUTPUT);
 
   digitalWrite(relayShift,HIGH);
   digitalWrite(relayShift + 1,HIGH);
@@ -25,10 +27,14 @@ void loop(){
   uint16_t analog_2 = analogRead(A_2);
   uint16_t analog_3 = analogRead(A_3);    
 
-  relay[0] = analog_0 < 300;
-  relay[1] = analog_1 < 300;
-  relay[2] = analog_2 < 300;
-  relay[3] = analog_3 < 300;
+  Serial.println(analog_0);
+  Serial.println(analog_1);
+  Serial.println(analog_2);
+  Serial.println(analog_3);
+  relay[0] = analog_0 > 300;
+  relay[1] = analog_1 > 300;
+  relay[2] = analog_2 > 300;
+  relay[3] = analog_3 > 300;
 
   for (int i = 0; i < 4; i++) {
     Serial.println("sensor");
@@ -36,9 +42,9 @@ void loop(){
     if (relay[i]) {
       turnOn(i + relayShift);
     }
-  }
+  }    
 
-  delay(1800000);       
+  delay(1800000);      
 }
 
 void turnOn(int relayPin) {
@@ -46,7 +52,7 @@ void turnOn(int relayPin) {
     Serial.println(relayPin);
     digitalWrite(LED_BUILTIN,HIGH);
     digitalWrite(relayPin,LOW);
-    delay(15000);
+    delay(30000);
     digitalWrite(LED_BUILTIN,LOW);
     digitalWrite(relayPin,HIGH);
 }
